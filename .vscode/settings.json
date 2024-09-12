@@ -9,5 +9,6 @@
             "command": "mvn install",
             "debug": false
         }
-    ]
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
 }

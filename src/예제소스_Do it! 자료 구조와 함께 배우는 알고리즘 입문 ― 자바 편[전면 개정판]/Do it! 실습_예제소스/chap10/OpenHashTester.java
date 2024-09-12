@@ -6,25 +6,25 @@ public class OpenHashTester {
 
     static Scanner stdIn = new Scanner(System.in);
 
-    //--- 데이터(회원번호＋이름) ---//
+    // --- 데이터(회원번호＋이름) ---//
     static class Data {
-        static final int NO   = 1;        // 번호를 읽어 들일까요?
-        static final int NAME = 2;        // 이름을 읽어 들일까요?
+        static final int NO = 1; // 번호를 읽어 들일까요?
+        static final int NAME = 2; // 이름을 읽어 들일까요?
 
-        private Integer no;               // 회원번호(키값)
-        private String  name;             // 이름
+        private Integer no; // 회원번호(키값)
+        private String name; // 이름
 
-        //--- 키값 ---//
+        // --- 키값 ---//
         Integer keyCode() {
             return no;
         }
 
-        //--- 문자열 표현을 반환 ---//
+        // --- 문자열 표현을 반환 ---//
         public String toString() {
             return name;
         }
 
-        //--- 데이터를 읽어 들임 ---//
+        // --- 데이터를 읽어 들임 ---//
         void scanData(String guide, int sw) {
             System.out.println(guide + "할 데이터를 입력하세요.");
 
@@ -39,33 +39,33 @@ public class OpenHashTester {
         }
     }
 
-    //--- 메뉴 열거형 ---//
+    // --- 메뉴 열거형 ---//
     enum Menu {
-        ADD(      "추가"),
-        REMOVE(   "삭제"),
-        SEARCH(   "검색"),
-        DUMP(     "표시"),
+        ADD("추가"),
+        REMOVE("삭제"),
+        SEARCH("검색"),
+        DUMP("표시"),
         TERMINATE("종료");
 
-        private final String message;        // 표시할 문자열
+        private final String message; // 표시할 문자열
 
-        static Menu MenuAt(int idx) {        // 순서가 idx번째인 열거를 반환
+        static Menu MenuAt(int idx) { // 순서가 idx번째인 열거를 반환
             for (Menu m : Menu.values())
                 if (m.ordinal() == idx)
                     return m;
             return null;
         }
 
-        Menu(String string) {                // 생성자(constructor)
+        Menu(String string) { // 생성자(constructor)
             message = string;
         }
 
-        String getMessage() {                // 표시할 문자열을 반환
+        String getMessage() { // 표시할 문자열을 반환
             return message;
         }
     }
 
-    //--- 메뉴 선택 ---//
+    // --- 메뉴 선택 ---//
     static Menu SelectMenu() {
         int key;
         do {
@@ -79,42 +79,44 @@ public class OpenHashTester {
     }
 
     public static void main(String[] args) {
-        Menu menu;                                // 메뉴 
-        Data data;                                // 추가용 데이터 참조
-        Data temp = new Data();                   // 읽어 들일 데이터
+        Menu menu; // 메뉴
+        Data data; // 추가용 데이터 참조
+        Data temp = new Data(); // 읽어 들일 데이터
 
         OpenHash<Integer, Data> hash = new OpenHash<Integer, Data>(13);
         do {
             switch (menu = SelectMenu()) {
-             case ADD :                           // 추가
-                data = new Data();
-                data.scanData("추가", Data.NO | Data.NAME);
-                 int k = hash.add(data.keyCode(), data);
-                 switch (k) {
-                  case 1: System.out.println("그 키값은 이미 등록되어 있습니다.");
-                              break;
-                  case 2: System.out.println("해시 테이블이 가득 찼습니다.");
-                              break; 
-                 }
-                 break;
+                case ADD: // 추가
+                    data = new Data();
+                    data.scanData("추가", Data.NO | Data.NAME);
+                    int k = hash.add(data.keyCode(), data);
+                    switch (k) {
+                        case 1:
+                            System.out.println("그 키값은 이미 등록되어 있습니다.");
+                            break;
+                        case 2:
+                            System.out.println("해시 테이블이 가득 찼습니다.");
+                            break;
+                    }
+                    break;
 
-             case REMOVE :                               // 삭제
-                 temp.scanData("삭제", Data.NO);
-                 hash.remove(temp.keyCode());
-                 break;
+                case REMOVE: // 삭제
+                    temp.scanData("삭제", Data.NO);
+                    hash.remove(temp.keyCode());
+                    break;
 
-             case SEARCH :                               // 검색
-                temp.scanData("검색", Data.NO);
-                 Data t = hash.search(temp.keyCode());
-                 if (t != null)
-                     System.out.println("그 키를 갖는 데이터는 " + t + "입니다.");
-                else
-                     System.out.println("해당 데이터가 없습니다.");
-                 break;
+                case SEARCH: // 검색
+                    temp.scanData("검색", Data.NO);
+                    Data t = hash.search(temp.keyCode());
+                    if (t != null)
+                        System.out.println("그 키를 갖는 데이터는 " + t + "입니다.");
+                    else
+                        System.out.println("해당 데이터가 없습니다.");
+                    break;
 
-             case DUMP :                                 // 표시
-                 hash.dump();
-                 break;
+                case DUMP: // 표시
+                    hash.dump();
+                    break;
             }
         } while (menu != Menu.TERMINATE);
     }
